@@ -85,7 +85,7 @@ public class FuncionPi4Jv2 extends Funcion implements ISignallable {
 		// jjfons : 2022/04/07
 		// Funcion no implementada en versión actual de plugin/library-gpio-raspberry
 		// Haremos una implementación 'software'
-		//		this.pin.blink(1000);
+		// this.pin.blink(1000);
 
 		if ( !this.isBlinking ) {
 			this.blinkingWorker.start();

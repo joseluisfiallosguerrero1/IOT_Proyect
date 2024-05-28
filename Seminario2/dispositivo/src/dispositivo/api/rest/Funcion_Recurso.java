@@ -29,6 +29,7 @@ public class Funcion_Recurso extends Recurso {
 		JSONObject jsonResult = new JSONObject();
 		try {
 			jsonResult.put("id", f.getId());
+			jsonResult.put("estado", f.getStatus());
 		} catch (JSONException e) {
 		}
 		return jsonResult;
@@ -41,7 +42,7 @@ public class Funcion_Recurso extends Recurso {
 		return dispositivo.getFuncion(funcionId);
 	}
 
-	
+	@Override
     @Get
     public Representation get() {
     	
@@ -61,7 +62,7 @@ public class Funcion_Recurso extends Recurso {
     }
     
     
-    
+    @Override
 	@Put
 	public Representation put(Representation entity) {
 
@@ -70,6 +71,14 @@ public class Funcion_Recurso extends Recurso {
 		IFuncion f = this.getFuncion();
 		if ( f == null ) {
 			return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_NOT_FOUND);
+		}
+
+		// Buscamos el dispositivo
+		IDispositivo dispositivo = this.getDispositivo_RESTApplication().getDispositivo();
+		if ( dispositivo == null || Boolean.FALSE.equals(dispositivo.getHabilitado())) {
+			String errorMessage = dispositivo == null ? "Dispositivo no encontrado" : "Dispositivo deshabilitado. No se ejecuta acción";
+			MySimpleLogger.warn("Funcion-Recurso-PUT", errorMessage);
+			return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 
 		// Función encontrada

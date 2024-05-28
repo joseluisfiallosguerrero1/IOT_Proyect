@@ -1,12 +1,16 @@
 package dispositivo.pi4j2.iniciador;
 
+import java.util.function.Function;
+
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 
 import dispositivo.componentes.Dispositivo;
+import dispositivo.componentes.Funcion;
 import dispositivo.componentes.pi4j2.FuncionPi4Jv2;
 import dispositivo.interfaces.FuncionStatus;
 import dispositivo.interfaces.IDispositivo;
+import dispositivo.interfaces.IFuncion;
 
 public class DispositivoIniciadorPi4Jv2 {
 
@@ -40,6 +44,8 @@ public class DispositivoIniciadorPi4Jv2 {
 		FuncionPi4Jv2 f2 = FuncionPi4Jv2.build("f2", 27, FuncionStatus.OFF, pi4jContext);
 		d.addFuncion(f2);
 
+		IFuncion f3 = FuncionPi4Jv2.build("f3", 22, FuncionStatus.BLINK, pi4jContext);
+		d.addFuncion(f3);
 		
 		// Arrancamos el dispositivo
 		d.iniciar();

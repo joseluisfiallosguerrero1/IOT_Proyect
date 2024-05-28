@@ -8,6 +8,8 @@ public interface IDispositivo {
 	
 	public IDispositivo iniciar();
 	public IDispositivo detener();
+	public Boolean getHabilitado();
+	public void setHabilitar(Boolean valor);
 		
 	public IDispositivo addFuncion(IFuncion f);
 	public IFuncion getFuncion(String funcionId);

@@ -27,9 +27,11 @@ public class Dispositivo_Recurso extends Recurso {
 		
 		try {
 			jsonResult.put("id", dispositivo.getId());
+			jsonResult.put("habilitado", dispositivo.getHabilitado());
 			if ( dispositivo.getFunciones() != null ) {
 				JSONArray arrayFunciones = new JSONArray();
 
+				dispositivo.getFunciones().forEach(f -> arrayFunciones.put(Funcion_Recurso.serialize(f)));
 				jsonResult.put("funciones", arrayFunciones);
 			}
 
@@ -43,6 +45,7 @@ public class Dispositivo_Recurso extends Recurso {
 		return this.getDispositivo_RESTApplication().getDispositivo();
 	}
 
+	@Override
     @Get
     public Representation get() {
 
@@ -59,7 +62,7 @@ public class Dispositivo_Recurso extends Recurso {
     }
     
     
-    
+    @Override
 	@Put
 	public Representation put(Representation entity) {
 
@@ -75,7 +78,10 @@ public class Dispositivo_Recurso extends Recurso {
 		try {
 			payload = new JSONObject(entity.getText());
 			String action = payload.getString("accion");
-			
+			if (action.equalsIgnoreCase("habilitar"))
+				d.setHabilitar(true);			
+			else if (action.equalsIgnoreCase("deshabilitar"))
+				d.setHabilitar(false);
 
 		} catch (JSONException | IOException e) {
 			this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);

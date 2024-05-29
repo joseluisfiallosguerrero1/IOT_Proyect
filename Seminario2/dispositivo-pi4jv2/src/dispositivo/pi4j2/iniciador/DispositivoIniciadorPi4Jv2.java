@@ -40,6 +40,8 @@ public class DispositivoIniciadorPi4Jv2 {
 		FuncionPi4Jv2 f2 = FuncionPi4Jv2.build("f2", 27, FuncionStatus.OFF, pi4jContext);
 		d.addFuncion(f2);
 
+		FuncionPi4Jv2 f3 = FuncionPi4Jv2.build("f3", 22, FuncionStatus.BLINK, pi4jContext);
+		d.addFuncion(f3);
 		
 		// Arrancamos el dispositivo
 		d.iniciar();

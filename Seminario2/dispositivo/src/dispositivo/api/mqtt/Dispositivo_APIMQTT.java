@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+import org.json.JSONObject;
 
 import dispositivo.interfaces.Configuracion;
 import dispositivo.interfaces.IDispositivo;
@@ -85,9 +86,18 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		//
 		// Definimos una API con mensajes de acciones básicos
 		//
-
 		// Ejecutamos acción indicada en campo 'accion' del JSON recibido
-		String action = payload;
+		JSONObject messageJSON = new JSONObject(payload);
+		String action = messageJSON.getString("accion");
+		if (action.equalsIgnoreCase("habilitar"))
+			this.dispositivo.setHabilitar(true);
+		else if (action.equalsIgnoreCase("deshabilitar"))
+			this.dispositivo.setHabilitar(false);
+		
+		if (Boolean.FALSE.equals(this.dispositivo.getHabilitado())) {
+			MySimpleLogger.warn(this.loggerId, "Dispositivo deshabilitado. No se ejecuta acción");
+			return;
+		}
 		
 		if ( action.equalsIgnoreCase("encender") )
 			f.encender();
@@ -97,9 +107,6 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 			f.parpadear();
 		else
 			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
-
-		
-		
 	}
 
 	/**

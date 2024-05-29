@@ -13,6 +13,7 @@ import dispositivo.interfaces.IFuncion;
 public class Dispositivo implements IDispositivo {
 	
 	protected String deviceId = null;
+	protected Boolean habilitado = true;
 
 	protected Map<String, IFuncion> functions = null;
 	protected Dispositivo_RegistradorMQTT registrador = null;
@@ -101,6 +102,15 @@ public class Dispositivo implements IDispositivo {
 		return this;
 	}
 	
+	@Override
+	public Boolean getHabilitado() {
+		return this.habilitado;			
+	}
+
+	@Override
+	public void setHabilitar(Boolean valor){
+		this.habilitado = valor;
+	}
 	
 	
 }

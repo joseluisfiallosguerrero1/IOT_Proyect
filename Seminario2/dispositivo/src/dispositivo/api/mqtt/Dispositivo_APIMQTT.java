@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import dispositivo.interfaces.Configuracion;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
-import dispositivo.utils.MySimpleLogger;
+import utils.MySimpleLogger;
 
 public class Dispositivo_APIMQTT implements MqttCallback {
 
@@ -89,22 +89,33 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		// Ejecutamos acción indicada en campo 'accion' del JSON recibido
 		JSONObject messageJSON = new JSONObject(payload);
 		String action = messageJSON.getString("accion");
-		if (action.equalsIgnoreCase("habilitar"))
+		String topicp = this.calculateInfoTopic(f);
+		if (action.equalsIgnoreCase("habilitar")){
 			this.dispositivo.setHabilitar(true);
-		else if (action.equalsIgnoreCase("deshabilitar"))
+			this.push(topicp, action);
+		}
+		else if (action.equalsIgnoreCase("deshabilitar")){
 			this.dispositivo.setHabilitar(false);
-		
+			this.push(topicp, action);
+		}
+			
 		if (Boolean.FALSE.equals(this.dispositivo.getHabilitado())) {
 			MySimpleLogger.warn(this.loggerId, "Dispositivo deshabilitado. No se ejecuta acción");
 			return;
 		}
 		
-		if ( action.equalsIgnoreCase("encender") )
+		if ( action.equalsIgnoreCase("encender") ){
 			f.encender();
-		else if ( action.equalsIgnoreCase("apagar") )
+			this.push(topicp, action);
+		}
+		else if ( action.equalsIgnoreCase("apagar") ){
 			f.apagar();
-		else if ( action.equalsIgnoreCase("parpadear") )
+			this.push(topicp, action);
+		}
+		else if ( action.equalsIgnoreCase("parpadear") ){
 			f.parpadear();
+			this.push(topicp, action);
+		}
 		else
 			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 	}
@@ -179,6 +190,21 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		
 	}
 	
+	protected void push(String myTopic, String content) {
+		
+		// subscribe to topic
+		try {
+			int subQoS = 0;
+			MqttMessage message = new MqttMessage(content.getBytes());
+            message.setQos(subQoS);		
+			
+            myClient.publish(myTopic, message);
+			MySimpleLogger.info(this.loggerId, "push al topic " + myTopic);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	protected void unsubscribe(String myTopic) {
 		

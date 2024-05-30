@@ -48,8 +48,9 @@ public class SmartCarStarterApp {
 
 		// Indicate that the SmartCar is on road "R5s1" at km 50
 		int currentSpeed = 50;
-		sc1.getIntoRoad("R5s1", currentSpeed);  // indicamos que el SmartCar está en tal segmento
-		sc1.notifyIncident("INCIDENT");
+		sc1.getIntoRoad("R5s5", currentSpeed);  // indicamos que el SmartCar está en tal segmento
+		//sc1.notifyIncident("INCIDENT");
+		sc1.notifyIncident("alert");
 
 		// Create and connect a SpeedLimitSign
 		SpeedLimitSign speedLimitSign = new SpeedLimitSign(speedlimitID, brokerURL);

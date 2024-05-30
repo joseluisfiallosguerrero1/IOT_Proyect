@@ -2,14 +2,14 @@ package componentes;
 
 import utils.MySimpleLogger;
 
-import java.time.Instant;
+import java.time.Instant;  
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONObject;
 
-public class SmartCar {
+public class TrafficLight {
 
 
 	protected String brokerURL = null;
@@ -20,8 +20,7 @@ public class SmartCar {
 	protected SmartCar_InicidentNotifier notifier = null;
 	protected MyMqttClient publisher = null;
 	protected String baseTopic = "es/upv/pros/tatami/smartcities/traffic/PTPaterna";
-	
-	public SmartCar(String id, String brokerURL) {
+	public TrafficLight(String id, String brokerURL) {
 		
 		this.setSmartCarID(id);
 		this.brokerURL = brokerURL;

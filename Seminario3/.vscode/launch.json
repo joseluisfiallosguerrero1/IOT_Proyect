@@ -11,7 +11,8 @@
             "mainClass": "SmartCarStarterApp",
             "args": [
                 "SmartCar-1234ABC",
-                "tcp://ttmi008.iot.upv.es:1883"
+                //"tcp://ttmi008.iot.upv.es:1883"
+                "tcp://tambori.dsic.upv.es:10083"
             ]
         }
     ]

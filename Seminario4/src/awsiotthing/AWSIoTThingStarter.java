@@ -40,11 +40,11 @@ public class AWSIoTThingStarter {
 	// $> java -jar awsiotthing.jar clientId=mi_publicador pub=true topic=my/topic msg=hola
 
 	// valores por defecto de los parámetros de inicio
-	protected static String clientEndpoint = "<prefix>.iot.<region>.amazonaws.com";       // replace <prefix> and <region> with your own
-	protected static String clientId = "<client>-" + UUID.randomUUID().toString();                  // replace with your own client ID. Use unique client IDs for concurrent connections.
-	protected static String certsDir = "<certs-folder>/";
-	protected static String certificateFile = certsDir + "<cert-id>-certificate.pem.crt";               // X.509 based certificate file
-	protected static String privateKeyFile = certsDir + "<cert-id>-private.pem.key";                    // PKCS#1 or PKCS#8 PEM encoded private key file
+	protected static String clientEndpoint = "a3kqs7rhgdczgv-ats.iot.us-east-1.amazonaws.com";       // replace <prefix> and <region> with your own. Se obtiene de AWS
+	protected static String clientId = "iot-object-" + UUID.randomUUID().toString();                  // replace with your own client ID. USE UNIQUE client IDs for concurrent connections.
+	protected static String certsDir = "certs/";								//Carpeta que aloja el certificado
+	protected static String certificateFile = certsDir + "f7d004799d9b5a11ad6850b39aba2531c0bf42d9ffe84199f7bebffe94fef9ae-certificate.pem.crt";               // X.509 based certificate file
+	protected static String privateKeyFile = certsDir + "f7d004799d9b5a11ad6850b39aba2531c0bf42d9ffe84199f7bebffe94fef9ae-private.pem.key";                    // PKCS#1 or PKCS#8 PEM encoded private key file
 	
 	protected static boolean publisher = false;
 	protected static boolean subscriber = false;
@@ -98,7 +98,7 @@ public class AWSIoTThingStarter {
 		if ( publisher ) {
 			JSONObject prop = new JSONObject();
 			try {
-				prop.put("f5","encendido");
+				prop.put("message:","Hola mundo, desde el backend de AWS Iot");
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

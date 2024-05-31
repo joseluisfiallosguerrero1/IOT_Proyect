@@ -165,6 +165,7 @@ public class SmartCar {
 	}
 
 	public void speedLimitUpdate(int speedLimit) {
+		if (speedLimit == this.roadSpeed) return;
 		if (speedLimit < this.roadSpeed) {
 			MySimpleLogger.info(this.smartCarID, "Speed limit reduced to " + speedLimit + " from " + this.roadSpeed);
 		} else {

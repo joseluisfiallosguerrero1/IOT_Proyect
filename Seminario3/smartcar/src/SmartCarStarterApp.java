@@ -27,12 +27,13 @@ public class SmartCarStarterApp {
         SmartCar sc1 = new SmartCar(smartCarID+"-5.1", brokerURL);
 		sc1.setCurrentRoadPlace(new RoadPlace(firstRoadSegment, 0));
 		
-		SmartCar[] smartCars = new SmartCar[firstRoadSegmentCapacity];
-		for (int i = 0; i < 4; i++) {
-			SmartCar sc = new SmartCar(smartCarID + "-" + i, brokerURL);
-			sc.setCurrentRoadPlace(new RoadPlace(firstRoadSegment, 0));
-			smartCars[i] = sc;
-		}
+		
+		// SmartCar[] smartCars = new SmartCar[firstRoadSegmentCapacity];
+		// for (int i = 0; i < 4; i++) {
+		// 	SmartCar sc = new SmartCar(smartCarID + "-" + i, brokerURL);
+		// 	sc.setCurrentRoadPlace(new RoadPlace(firstRoadSegment, 0));
+		// 	smartCars[i] = sc;
+		// }
 
 		try {
 			Thread.sleep(5000);
@@ -49,7 +50,7 @@ public class SmartCarStarterApp {
 		sc1.getIntoRoad(secondRoadSegment, currentSpeed);
 		//sc1.notifyIncident("INCIDENT");
 		sc1.notifyIncident("alert");
-
+		
 		// Create and connect a SpeedLimitSign
 		SpeedLimitSign speedLimitSign = new SpeedLimitSign(speedlimitID, brokerURL);
 		speedLimitSign.connect();
@@ -59,6 +60,7 @@ public class SmartCarStarterApp {
 		speedingCar.setCurrentRoadPlace(new RoadPlace(secondRoadSegment, 0));
 
 		// Set a new speed limit on a specific road segment
-		speedLimitSign.reportSpeedLimit(secondRoadSegment, currentSpeed, 40); 
+		speedLimitSign.reportSpeedLimit(secondRoadSegment, currentSpeed, 120);
+		
     }
 }

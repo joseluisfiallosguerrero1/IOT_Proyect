@@ -10,9 +10,9 @@
             "request": "launch",
             "mainClass": "SmartCarStarterApp",
             "args": [
-                "SmartCar-BMuvedoble",
-                //"tcp://ttmi008.iot.upv.es:1883"
-                "tcp://tambori.dsic.upv.es:10083"
+                "SmartCar-ttmi05x",
+                "tcp://ttmi008.iot.upv.es:1883"
+                // "tcp://tambori.dsic.upv.es:10083"
             ]
         }
     ]

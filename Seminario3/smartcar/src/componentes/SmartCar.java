@@ -3,6 +3,7 @@ package componentes;
 import utils.MySimpleLogger;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -10,8 +11,6 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONObject;
 
 public class SmartCar {
-
-
 	protected String brokerURL = null;
 
 	protected String smartCarID = null;
@@ -20,6 +19,7 @@ public class SmartCar {
 	protected SmartCar_InicidentNotifier notifier = null;
 	protected MyMqttClient publisher = null;
 	protected String baseTopic = "es/upv/pros/tatami/smartcities/traffic/PTPaterna";
+	protected String roadPath = "/road/";
 	
 	public SmartCar(String id, String brokerURL) {
 		
@@ -32,6 +32,9 @@ public class SmartCar {
 		publisher.connect();
 		this.subscriber = new SmartCar_RoadInfoSubscriber(id, this, brokerURL);
 		subscriber.connect();
+
+		// Shutdown hook
+		Runtime.getRuntime().addShutdownHook(new Thread(this::sendVehicleOut));
 	}
 	
 	
@@ -44,32 +47,50 @@ public class SmartCar {
 	}
 
 	public void setCurrentRoadPlace(RoadPlace rp) {
-		if (this.rp == null && rp != null) {
+		// 1.- Si ya teníamos algún suscriptor conectado al tramo de carretera antiguo, primero los desconectamos
+		// 2.- Ahora debemos crear suscriptor/es para conocer 'cosas' de dicho tramo de carretera, y conectarlo/s
+		// 3.- Debemos suscribir este/os suscriptor/es a los canales adecuados
+		if (rp == null) return;
+
+		if (this.rp == null) {
 			this.rp = rp;
 			try {
-				String message = buildMessage("VEHICLE_IN", "PrivateUsage");
-				this.publisher.publish(this.baseTopic + "/road/" + this.rp.getRoad() +"/traffic", message);
-				subscriber.subscribe(this.baseTopic + "road/"+this.rp.getRoad()+"/info");
+				this.sendVehicleIn();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if (this.rp != rp) {
-			try {
-				String message = buildMessage("VEHICLE_OUT", "PrivateUsage");
-				this.publisher.publish(this.baseTopic + "/road/" + this.rp.getRoad() +"/traffic", message);
-				subscriber.unsubscribe(this. baseTopic + "road/"+this.rp.getRoad()+"/info");
-				this.rp = rp;
-				message = buildMessage("VEHICLE_IN", "PrivateUsage");
-				this.publisher.publish(this.baseTopic + "/road/" + this.rp.getRoad() +"/traffic", message);
-				subscriber.subscribe(this.baseTopic + "road/"+this.rp.getRoad()+"/info");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+ 
+		if (!Objects.equals(this.rp.getRoad(), rp.getRoad())) {
+			MySimpleLogger.info(this.smartCarID, "Changing road from " + this.rp.getRoad() + " to " + rp.getRoad() + " at km " + rp.getKm() + "...");
+			// Send vehicle out message
+			this.sendVehicleOut();
+			// Send vehicle in message
+			this.rp = rp;
+			this.sendVehicleIn();
 		}
-		// 1.- Si ya teníamos algún suscriptor conectado al tramo de carretera antiguo, primero los desconectamos
-		// 2.- Ahora debemos crear suscriptor/es para conocer 'cosas' de dicho tramo de carretra, y conectarlo/s
-		// 3.- Debemos suscribir este/os suscriptor/es a los canales adecuados
+	}
+
+	private void sendVehicleIn() {
+		if (this.rp == null) return;
+		try {
+			String message = buildMessage("VEHICLE_IN", "PrivateUsage");
+			this.publisher.publish(this.baseTopic + roadPath + this.rp.getRoad() +"/traffic", message);
+			this.subscriber.subscribe(this.baseTopic + roadPath + this.rp.getRoad()+"/info");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void sendVehicleOut() {
+		if (this.rp == null) return;
+		try {
+			String message = buildMessage("VEHICLE_OUT", "PrivateUsage");
+			this.publisher.publish(this.baseTopic + roadPath + this.rp.getRoad() +"/traffic", message);
+			this.subscriber.unsubscribe(this.baseTopic + roadPath +this.rp.getRoad()+"/info");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String buildMessage(String action, String role) {
@@ -90,6 +111,7 @@ public class SmartCar {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
 		return completeMessage.toString();
 	}
 

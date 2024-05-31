@@ -30,7 +30,8 @@ public class MyMqttClient implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		
 		String payload = new String(message.getPayload());
-		
+		MySimpleLogger.trace(this.clientId, ">>>>>>>>>>>>>>>>>>>>>>-------------------------------------------------");
+
 		MySimpleLogger.trace(this.clientId, "-------------------------------------------------");
 		MySimpleLogger.trace(this.clientId, "| Topic:" + topic);
 		MySimpleLogger.trace(this.clientId, "| Message: " + payload);
@@ -120,7 +121,7 @@ public class MyMqttClient implements MqttCallback {
 		try {
 			int subQoS = 0;
 			myClient.unsubscribe(theTopic);
-			MySimpleLogger.trace(this.clientId, "Client UNsubscribed from the topic " + theTopic);
+			MySimpleLogger.trace(this.clientId, "Client Unsubscribed from the topic " + theTopic);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -24,12 +24,12 @@ public class SmartCarStarterApp {
 
 		String firstRoadSegment = "R1s1";
 		int firstRoadSegmentCapacity = 6;
-        SmartCar sc1 = new SmartCar(smartCarID + UUID.randomUUID().toString(), brokerURL);
+        SmartCar sc1 = new SmartCar(smartCarID+"-5.1", brokerURL);
 		sc1.setCurrentRoadPlace(new RoadPlace(firstRoadSegment, 0));
-
+		
 		SmartCar[] smartCars = new SmartCar[firstRoadSegmentCapacity];
-		for (int i = 0; i < 7; i++) {
-			SmartCar sc = new SmartCar(smartCarID + UUID.randomUUID().toString(), brokerURL);
+		for (int i = 0; i < 4; i++) {
+			SmartCar sc = new SmartCar(smartCarID + "-" + i, brokerURL);
 			sc.setCurrentRoadPlace(new RoadPlace(firstRoadSegment, 0));
 			smartCars[i] = sc;
 		}
@@ -41,7 +41,7 @@ public class SmartCarStarterApp {
 		}
 
 		//Ejercicio 5.3
-		String speedlimitID = "SpeedLimitSign1" + UUID.randomUUID().toString();
+		String speedlimitID = "SpeedLimitSign1";
 
 		// Indicate that the SpeedLimitSign is on secondRoadSegment
 		String secondRoadSegment = "R5s1";
@@ -54,6 +54,10 @@ public class SmartCarStarterApp {
 		SpeedLimitSign speedLimitSign = new SpeedLimitSign(speedlimitID, brokerURL);
 		speedLimitSign.connect();
 		
+		// SmartCard at new speed limit
+		SmartCar speedingCar = new SmartCar(smartCarID + "-speeding", brokerURL);
+		speedingCar.setCurrentRoadPlace(new RoadPlace(secondRoadSegment, 0));
+
 		// Set a new speed limit on a specific road segment
 		speedLimitSign.reportSpeedLimit(secondRoadSegment, currentSpeed, 40); 
     }

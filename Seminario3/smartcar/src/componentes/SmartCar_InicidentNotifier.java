@@ -21,11 +21,9 @@ public class SmartCar_InicidentNotifier extends MyMqttClient {
 		super(clientId, smartcar, brokerURL);
 	}
 	
-	
 	public void alert(String smartCarID, String notificationType, RoadPlace place) {
 
 		String myTopic =  "es/upv/pros/tatami/smartcities/traffic/PTPaterna/road/" + place.getRoad() + "/alerts";
-		//String myTopic =  "iot/2023/juanjjs/road/" + place.getRoad() + "/alerts";
 		long timestamp = System.currentTimeMillis();
 
 		MqttTopic topic = myClient.getTopic(myTopic);

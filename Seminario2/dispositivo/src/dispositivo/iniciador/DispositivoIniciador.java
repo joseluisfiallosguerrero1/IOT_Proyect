@@ -7,7 +7,15 @@ import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 
 public class DispositivoIniciador {
-
+	// Ejercicio 5.2 Jose
+	// Ejercicio 5.3 Santi
+	// Ejercicio 5.4 Victor
+	// Ejercicio 5.5 Gary
+	// Ejercicio 5.6 Victor
+	// Ejercicio 5.7 Juan
+	// Ejercicio 5.8 Gary
+	// Ejercicio 5.9 David
+	// ejercicio 5.10 David
 	public static void main(String[] args) {
 		
 		if ( args.length < 4 ) {

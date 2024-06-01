@@ -7,7 +7,7 @@
 ![alt text](image1.png)
 
 5. Generar automaticamente un certificado
-Se asocia el certificado a la politica (que ya previamente habia creado y que se eneseña en el punto 6) y se descarga la información.
+Se asocia el certificado a la politica (que ya previamente habia creado y que se enseña en el punto 6) y se descarga la información.
 
 6. Montar la politica
 *NOTA:* Para el campo Resource, el primer segmento de información se obtiene de: 

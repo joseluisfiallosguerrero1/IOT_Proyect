@@ -7,6 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+import org.json.JSONObject;
 
 import utils.MySimpleLogger;
 
@@ -30,11 +31,12 @@ public class MyMqttClient implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		
 		String payload = new String(message.getPayload());
-		
+
 		MySimpleLogger.trace(this.clientId, "-------------------------------------------------");
 		MySimpleLogger.trace(this.clientId, "| Topic:" + topic);
 		MySimpleLogger.trace(this.clientId, "| Message: " + payload);
 		MySimpleLogger.trace(this.clientId, "-------------------------------------------------");
+		this.processPayload(payload);
 	}
 
 	
@@ -120,7 +122,7 @@ public class MyMqttClient implements MqttCallback {
 		try {
 			int subQoS = 0;
 			myClient.unsubscribe(theTopic);
-			MySimpleLogger.trace(this.clientId, "Client UNsubscribed from the topic " + theTopic);
+			MySimpleLogger.trace(this.clientId, "Client Unsubscribed from the topic " + theTopic);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,6 +135,20 @@ public class MyMqttClient implements MqttCallback {
 			System.out.println("in the topic: " + topic);
 			myClient.publish(topic, message.getBytes(), 0, false);
 			System.out.println("message published.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void processPayload(String payload) {
+		try {
+			JSONObject jsonPayload = new JSONObject(payload);
+			JSONObject msgObject = jsonPayload.getJSONObject("msg");
+			String signalType = msgObject.getString("signal-type");
+			if (signalType.equals("SPEED_LIMIT")) {
+				int speedLimit = msgObject.getInt("value");
+				this.smartcar.speedLimitUpdate(speedLimit);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

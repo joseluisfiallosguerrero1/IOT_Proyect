@@ -1,5 +1,8 @@
 package componentes;
 
+import java.util.Random;
+import java.util.UUID;
+
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -18,24 +21,53 @@ public class SmartCar_InicidentNotifier extends MyMqttClient {
 		super(clientId, smartcar, brokerURL);
 	}
 	
-	
 	public void alert(String smartCarID, String notificationType, RoadPlace place) {
 
 		String myTopic =  "es/upv/pros/tatami/smartcities/traffic/PTPaterna/road/" + place.getRoad() + "/alerts";
-		//String myTopic =  "iot/2023/juanjjs/road/" + place.getRoad() + "/alerts";
+		long timestamp = System.currentTimeMillis();
 
 		MqttTopic topic = myClient.getTopic(myTopic);
 
 
-		// publish incident 'basic'
-		// TIP: habrá que adaptar este mensaje si queremos conectarlo al servicio de tráfico SmartTraffic PTPaterna,
-		//      para que siga la estructura allí propuesta (ver documento Seminario 3)
+		// Generar un ID aleatorio compuesto solo de números directamente
+		Random random = new Random();
+		StringBuilder randomNumericIdBuilder = new StringBuilder();
+		for (int i = 0; i < 10; i++) { // Generar un ID de 10 dígitos
+			randomNumericIdBuilder.append(random.nextInt(10));
+		}
+		String msgID = randomNumericIdBuilder.toString();
+
+		// JSON para envio de alertas
 		JSONObject pubMsg = new JSONObject();
+		JSONObject msgDetails = new JSONObject();
 		try {
-			pubMsg.put("vehicle", smartCarID);
-			pubMsg.put("event", notificationType);
-			pubMsg.put("road", place.getRoad());
-			pubMsg.put("kp", place.getKm());
+			// Llenamos el mensaje principal
+			pubMsg.put("id", "MSG_" + timestamp);
+			pubMsg.put("type", "ROAD_INCIDENT"); 
+			pubMsg.put("timestamp", timestamp );
+			pubMsg.put("msg", msgDetails);	
+
+			// Llenamos los detalles del mensaje
+            msgDetails.put("rt", "traffic::"+notificationType); 
+			
+			// Incident type y descripcion segun tipo de alerta
+			if ("alert".equalsIgnoreCase(notificationType)) {
+                msgDetails.put("incident-type", "TRAFFIC_ACCIDENT");
+                msgDetails.put("description", "Vehicle Crash");
+            } else if ("incident".equalsIgnoreCase(notificationType)) {
+                msgDetails.put("incident-type", "incident");
+                msgDetails.put("description", "Working Area");
+            }
+
+			// resto de mensaje
+            msgDetails.put("id", msgID);
+            msgDetails.put("road", place.getRoad().split("s")[0]);
+            msgDetails.put("road-segment", place.getRoad()); 
+            msgDetails.put("starting-position", place.getKm());
+            msgDetails.put("ending-position", place.getKm());
+            msgDetails.put("status", "Active");
+            msgDetails.put("link", "/incident/"+ msgID);
+
 	   		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

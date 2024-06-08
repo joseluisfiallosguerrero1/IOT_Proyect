@@ -46,6 +46,13 @@ public class PanelInformativo implements IDispositivo {
             this.getFuncion("f1").encender();
         }
     }
+	public void accidenteCarretera(String status) {
+        if (status.equals("Active")) {
+            this.getFuncion("f2").apagar();
+        } else  {
+			this.getFuncion("f2").parpadear();
+        }
+    }
 
 	@Override
 	public String getId() {

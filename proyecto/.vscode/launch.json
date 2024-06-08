@@ -13,7 +13,9 @@
                 "ttmi060",
                 "ttmi060.iot.upv.es",
                 8182,
-                "tcp://tambori.dsic.upv.es:1883"]
+                "tcp://tambori.dsic.upv.es:1883",
+                "R1s1"
+            ]
         },
         {
             "type": "java",
@@ -21,10 +23,12 @@
             "request": "launch",
             "mainClass": "dispositivo.pi4j2.iniciador.DispositivoIniciadorPi4Jv2",
             "args": [
-                "ttmi050",
-                "ttmi050.iot.upv.es",
+                "ttmi060",
+                "ttmi060.iot.upv.es",
                 8182,
-                "tcp://mqttserver:1883"]
+                "tcp://tambori.dsic.upv.es:1883",
+                "R1s1"
+            ]
         }
     ]
 }

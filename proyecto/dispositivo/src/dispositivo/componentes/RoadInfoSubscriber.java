@@ -1,6 +1,8 @@
 package dispositivo.componentes;
+
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
+
 public class RoadInfoSubscriber extends MyMqttClient {
 	public RoadInfoSubscriber(String clientId, PanelInformativo panelInformativo, String MQTTBrokerURL) {
 		super(clientId, panelInformativo, MQTTBrokerURL);
@@ -10,19 +12,21 @@ public class RoadInfoSubscriber extends MyMqttClient {
 	@Override
 	public void connect() {
 		super.connect();
-		String topic = this.baseTopic +"/road/"+ this.panelInformativo.getRoadPlace().getSegment() + "/info";
+		String topic = this.baseTopic + "/road/" + this.panelInformativo.getRoadPlace().getSegment() + "/info";
 		subscribe(topic);
 	}
 
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		super.messageArrived(topic, message);
-		JSONObject payload = null;
-		payload = new JSONObject(entity.getText());
-		String roadSituationType = payload.getString("type");
-		if(roadSituationType.equals("ROAD_STATUS")){
-
-		}else if(roadSituationType.equals("ROAD_INCIDENT")){
+		String payload = new String(message.getPayload());
+		JSONObject jsonPayload = new JSONObject(payload);
+		String roadSituationType = jsonPayload.getString("type");
+		if (roadSituationType.equals("ROAD_STATUS")) {
+			JSONObject msgObject = jsonPayload.getJSONObject("msg");
+			String roadStatus = msgObject.getString("status");
+			this.panelInformativo.congestionCarretera(roadStatus);
+		} else if (roadSituationType.equals("ROAD_INCIDENT")) {
 
 		}
 	}

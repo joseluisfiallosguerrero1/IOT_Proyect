@@ -45,6 +45,7 @@ public class PanelInformativo implements IDispositivo {
         } else if (status.equals("No_Manouvers") || status.equals("Collapsed")) {
             this.getFuncion("f1").encender();
         }
+        
     }
 	public void accidenteCarretera(String status) {
         if (status.equals("Active")) {

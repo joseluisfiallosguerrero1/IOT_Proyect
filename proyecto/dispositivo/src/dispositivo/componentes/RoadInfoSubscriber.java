@@ -18,5 +18,11 @@ public class RoadInfoSubscriber extends MyMqttClient {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		super.messageArrived(topic, message);
 		String payload = new String(message.getPayload());
+		String roadSituationType = payload.getString("type");
+		if(roadSituationType.equals('ROAD_STATUS')){
+
+		}else if(roadSituationType.equals('ROAD_INCIDENT')){
+
+		}
 	}
 }

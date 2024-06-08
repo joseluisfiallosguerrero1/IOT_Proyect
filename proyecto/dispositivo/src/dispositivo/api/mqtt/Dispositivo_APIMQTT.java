@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import dispositivo.interfaces.Configuracion;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
-import utils.MySimpleLogger;
+import dispositivo.utils.MySimpleLogger;
 
 public class Dispositivo_APIMQTT implements MqttCallback {
 

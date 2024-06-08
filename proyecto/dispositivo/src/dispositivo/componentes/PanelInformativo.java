@@ -11,19 +11,41 @@ public class PanelInformativo implements IDispositivo {
     protected String deviceId = null;
     protected Map<String, IFuncion> functions = null;
     protected RoadInfoSubscriber roadSubscriber = null;
+    protected RoadPlace roadPlace = null;
 
-    public PanelInformativo(String deviceId, String deviceIP, int port, String mqttBroker) {
+    public PanelInformativo(String deviceId, String deviceIP, String roadSegment, String mqttBroker) {
         this.deviceId = deviceId;
+        String roadName = roadSegment.split("s")[0];
+        this.roadPlace = new RoadPlace(roadName, roadSegment, 0);
         this.roadSubscriber = new RoadInfoSubscriber(deviceIP, this, mqttBroker);
+        this.roadSubscriber.connect();
     }
 
     protected Map<String, IFuncion> getFunctions() {
 		return this.functions;
 	}
 
-	protected void setFunctions(Map<String, IFuncion> fs) {
+	public void setFunctions(Map<String, IFuncion> fs) {
 		this.functions = fs;
 	}
+
+    public void setRoadPlace(RoadPlace rp) {
+        this.roadPlace = rp;
+    }
+
+    public RoadPlace getRoadPlace() {
+        return this.roadPlace;
+    }
+
+    public void congestionCarretera(String status) {
+        if (status.equals("Free_Flow") || status.equals("Mostly_Free_Flow")) {
+            this.getFuncion("f1").apagar();
+        } else if (status.equals("Limited_Manouvers")) {
+            this.getFuncion("f1").parpadear();
+        } else if (status.equals("No_Manouvers") || status.equals("Collapsed")) {
+            this.getFuncion("f1").encender();
+        }
+    }
 
 	@Override
 	public String getId() {

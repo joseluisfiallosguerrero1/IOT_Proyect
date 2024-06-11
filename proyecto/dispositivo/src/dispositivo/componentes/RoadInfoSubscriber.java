@@ -22,6 +22,7 @@ public class RoadInfoSubscriber extends MyMqttClient {
 		String payload = new String(message.getPayload());
 		JSONObject jsonPayload = new JSONObject(payload);
 		String roadSituationType = jsonPayload.getString("type");
+		System.out.println(roadSituationType);
 		if (roadSituationType.equals("ROAD_STATUS")) {
 			JSONObject msgObject = jsonPayload.getJSONObject("msg");
 			String roadStatus = msgObject.getString("status");

@@ -1,10 +1,13 @@
-package awsiotthing;
+package dispositivo.awsiotthing;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.amazonaws.services.iot.client.AWSIotTopic;
 
-import utils.MySimpleLogger;
+import dispositivo.utils.MySimpleLogger;
 
 public class AWSIoT_TopicHandler extends AWSIotTopic {
 
@@ -15,9 +18,30 @@ public class AWSIoT_TopicHandler extends AWSIotTopic {
 	@Override
 	public void onMessage(AWSIotMessage message) {
 		//super.onMessage(message);
-		String text = message.getStringPayload();
-		MySimpleLogger.info(AWSIoTThingStarter.loggerId + "-topicHandler", "RECEIVED: " + text);
+		System.out.println(message.getTopic());
+		if (message.getTopic().endsWith("f2")){
+			byte[] payloadBytes = message.getPayload();
 
+			String payloadString = new String(payloadBytes);
+
+			JSONObject jsonPayload;
+			try {
+				jsonPayload = new JSONObject(payloadString);
+				String roadSituationType = jsonPayload.getString("accion");
+				if (roadSituationType.equals("ROAD_INCIDENT")) {
+					String text = message.getStringPayload();
+					MySimpleLogger.info(AWSIoTThingStarter.loggerId + "-topicHandler", "RECEIVED: " + text);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		
+			
+		}
+		
 	}
 
 }

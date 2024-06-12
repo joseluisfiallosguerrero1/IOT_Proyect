@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import dispositivo.awsiotthing.AWSIoTThingStarterI;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 
@@ -12,12 +13,15 @@ public class PanelInformativo implements IDispositivo {
     protected Map<String, IFuncion> functions = null;
     protected RoadInfoSubscriber roadSubscriber = null;
     protected RoadPlace roadPlace = null;
+    protected AWSIoTThingStarterI awsIot = null;
 
     public PanelInformativo(String deviceId, String deviceIP, String roadSegment, String mqttBroker) {
         this.deviceId = deviceId;
         String roadName = roadSegment.split("s")[0];
         this.roadPlace = new RoadPlace(roadName, roadSegment, 0);
         this.roadSubscriber = new RoadInfoSubscriber(deviceIP, this, mqttBroker);
+        this.awsIot = new AWSIoTThingStarterI();
+
         this.roadSubscriber.connect();
     }
 

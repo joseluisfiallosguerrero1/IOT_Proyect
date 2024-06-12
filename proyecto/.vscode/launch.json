@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AWSIoTThingStarter",
+            "request": "launch",
+            "mainClass": "dispositivo.awsiotthing.AWSIoTThingStarter",
+            "projectName": "proyecto_20c21e4e"
+        },
+        {
+            "type": "java",
+            "name": "AWSIoTThingStarterI",
+            "request": "launch",
+            "mainClass": "dispositivo.awsiotthing.AWSIoTThingStarterI",
+            "projectName": "proyecto_20c21e4e"
+        },
+        {
+            "type": "java",
             "name": "Dispositivo",
             "request": "launch",
             "mainClass": "dispositivo.iniciador.DispositivoIniciador",

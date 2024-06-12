@@ -2,11 +2,7 @@ package dispositivo.awsiotthing;
 
 import java.util.UUID;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.amazonaws.services.iot.client.AWSIotException;
-import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil;
@@ -14,7 +10,7 @@ import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil.KeyStorePa
 
 import dispositivo.utils.MySimpleLogger;
 
-public class AWSIoTThingStarter {
+public class AWSIoTThingStarterI {
 
     // parámetros de inicio del programa. Permite ejecutar soluciones parametrizables desde consola
     protected static final String CLIENT_ENDPOINT_KEY = "clientEndpoint";
@@ -61,10 +57,10 @@ public class AWSIoTThingStarter {
     protected static String loggerId = "my-aws-iot-thing";
     
     
-    public static void main(String[] args) {
+    public AWSIoTThingStarterI() {
         
         // procesamos los parámetros de entrada
-        processInputParameters(args);
+        //processInputParameters(args);
         MySimpleLogger.info(loggerId, " Client Endpoint: " + clientEndpoint);
         MySimpleLogger.info(loggerId, "       Client Id: " + clientId);
         MySimpleLogger.info(loggerId, "Certificate File: " + certificateFile);
@@ -92,54 +88,11 @@ public class AWSIoTThingStarter {
 
         
         // SUBSCRIBE to multiple TOPICS
-        if ( subscriber ) {
-            for (String topic : topics) {
-                subscribe(client, topic, qos);
-            }
+        for (String topic : topics) {
+            subscribe(client, topic, qos);
         }
 
               
-        if ( publisher ) {
-            /*JSONObject prop = new JSONObject();
-            try {
-                prop.put("message", "Hola mundo, desde el backend de AWS Iot");*/
-			
-			JSONObject message1 = new JSONObject();
-			JSONObject message2 = new JSONObject();
-			JSONObject message3 = new JSONObject();
-			try {
-				message1.put("message", "Hola mundo, desde el backend de AWS f1");
-				message2.put("message", "Hola mundo, desde el backend de AWS f2");
-				message3.put("message", "Hola mundo, desde el backend de AWS f3");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		
-			try {
-				publish(client, "smartcities/traffic/PTPaterna/road/f1", message1.toString(), qos);
-				publish(client, "smartcities/traffic/PTPaterna/road/f2", message2.toString(), qos);
-				publish(client, "smartcities/traffic/PTPaterna/road/f3", message3.toString(), qos);
-			
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-
-            /*if ( !shadow )
-                payload = prop.toString();
-            else {
-                if ( shadow_report )
-                    payload = buildReportedStatusMessage(prop).toString();
-                else
-                    payload = buildDesiredStatusMessage(prop).toString();
-            }
-
-            for (String topic : topics) {
-                publish(client, topic, payload, qos);
-            }*/
-        }
-        
-        
-        
     }
     
     public static AWSIotMqttClient initClient() {
@@ -165,55 +118,6 @@ public class AWSIoTThingStarter {
         }
         
     }
-    
-    
-    public static void publish(AWSIotMqttClient client, String topic, String payload, AWSIotQos qos) {
-
-
-        // optional parameters can be set before connect()
-        try {
-            AWSIotMessage message = new AWSIotMessage(topic, qos, payload);
-            client.publish(message);
-            MySimpleLogger.info(loggerId, "... PUBLISHED message " + payload + " to TOPIC: " + topic);
-        } catch (AWSIotException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }        
-            
-        
-        
-    }
-    
-    
-    
-    protected static JSONObject buildReportedStatusMessage(JSONObject props) {
-        JSONObject r = new JSONObject();
-        
-        JSONObject s = new JSONObject();
-        try {
-            s.put("reported", props);
-            r.put("state", s);
-        } catch (JSONException e) {
-        }
-        
-        
-        return r;
-    }
-    
-    protected static JSONObject buildDesiredStatusMessage(JSONObject props) {
-        JSONObject r = new JSONObject();
-        
-        JSONObject s = new JSONObject();
-        try {
-            s.put("desired", props);
-            r.put("state", s);
-        } catch (JSONException e) {
-        }
-        
-        
-        return r;
-    }
-    
     
     
     protected static void processInputParameters(String[] args) {

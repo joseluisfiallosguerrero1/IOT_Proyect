@@ -27,7 +27,9 @@ public class RoadInfoSubscriber extends MyMqttClient {
 			String roadStatus = msgObject.getString("status");
 			this.panelInformativo.congestionCarretera(roadStatus);
 		} else if (roadSituationType.equals("ROAD_INCIDENT")) {
-
+			JSONObject msgObject = jsonPayload.getJSONObject("msg");
+			String roadStatus = msgObject.getString("status");
+			this.panelInformativo.accidenteCarretera(roadStatus);
 		}
 	}
 }

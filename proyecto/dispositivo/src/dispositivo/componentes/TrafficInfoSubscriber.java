@@ -21,6 +21,13 @@ public class TrafficInfoSubscriber extends MyMqttClient {
 		super.messageArrived(topic, message);
 		String payload = new String(message.getPayload());
 		JSONObject jsonPayload = new JSONObject(payload);
-		JSONObject msgObject = jsonPayload.getJSONObject("msg");
+		String roadSituationType = jsonPayload.getString("type");
+		if (roadSituationType.equals("TRAFFIC")) {
+			JSONObject msgObject = jsonPayload.getJSONObject("msg");
+			String vehicleType = msgObject.getString("vehicle-role");
+			int position = msgObject.getInt("position");
+			String roadSegment = msgObject.getString("road-segment");
+			this.panelInformativo.vehiculoEspecial(vehicleType, position, roadSegment) ;
+		}
 	}
 }

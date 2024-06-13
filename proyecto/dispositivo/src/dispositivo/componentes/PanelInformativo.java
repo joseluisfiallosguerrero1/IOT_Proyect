@@ -11,6 +11,7 @@ public class PanelInformativo implements IDispositivo {
     protected String deviceId = null;
     protected Map<String, IFuncion> functions = null;
     protected RoadInfoSubscriber roadSubscriber = null;
+    protected TrafficInfoSubscriber trafficSubscriber = null;
     protected RoadPlace roadPlace = null;
 
     public PanelInformativo(String deviceId, String deviceIP, String roadSegment, String mqttBroker) {
@@ -19,6 +20,8 @@ public class PanelInformativo implements IDispositivo {
         this.roadPlace = new RoadPlace(roadName, roadSegment, 0);
         this.roadSubscriber = new RoadInfoSubscriber(deviceIP, this, mqttBroker);
         this.roadSubscriber.connect();
+        this.trafficSubscriber = new TrafficInfoSubscriber("deviceIP", this, mqttBroker);
+        this.trafficSubscriber.connect();
     }
 
     protected Map<String, IFuncion> getFunctions() {

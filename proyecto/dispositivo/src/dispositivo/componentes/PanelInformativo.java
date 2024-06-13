@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import dispositivo.awsiotthing.AWSIoTThingStarterI;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
@@ -41,9 +44,13 @@ public class PanelInformativo implements IDispositivo {
         return this.roadPlace;
     }
 
-    public void congestionCarretera(String status) {
+    public void congestionCarretera(String status) throws JSONException {
+        System.out.println(status);
         if (status.equals("Free_Flow") || status.equals("Mostly_Free_Flow")) {
             this.getFuncion("f1").apagar();
+            JSONObject message = new JSONObject();
+            message.put("type", "apagado");
+            this.awsIot.publish("f1", message.toString());
         } else if (status.equals("Limited_Manouvers")) {
             this.getFuncion("f1").parpadear();
         } else if (status.equals("No_Manouvers") || status.equals("Collapsed")) {

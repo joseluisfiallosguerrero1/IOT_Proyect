@@ -3,6 +3,7 @@ package dispositivo.awsiotthing;
 import java.util.UUID;
 
 import com.amazonaws.services.iot.client.AWSIotException;
+import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil;
@@ -55,8 +56,8 @@ public class AWSIoTThingStarterI {
     protected static String payload = "{msg:hello}";
 
     protected static String loggerId = "my-aws-iot-thing";
-    
-    
+    AWSIotMqttClient client;
+    AWSIotQos qos;
     public AWSIoTThingStarterI() {
         
         // procesamos los parámetros de entrada
@@ -72,13 +73,13 @@ public class AWSIoTThingStarterI {
         
 
     
-        AWSIotMqttClient client = initClient();
+        this.client = initClient();
         
         // CONNECT CLIENT TO AWS IOT MQTT
         // optional parameters can be set before connect()
-        AWSIotQos qos = AWSIotQos.QOS0;        
+        this.qos = AWSIotQos.QOS0;        
         try {
-            client.connect();
+            this.client.connect();
             MySimpleLogger.info(loggerId, "Client Connected to AWS IoT MQTT");
             
         } catch (AWSIotException e) {
@@ -89,7 +90,7 @@ public class AWSIoTThingStarterI {
         
         // SUBSCRIBE to multiple TOPICS
         for (String topic : topics) {
-            subscribe(client, topic, qos);
+            subscribe(this.client, topic, this.qos);
         }
 
               
@@ -119,7 +120,25 @@ public class AWSIoTThingStarterI {
         
     }
     
-    
+      
+    public void publish( String function, String payload) {
+
+
+        String topic="smartcities/traffic/PTPaterna/road/"+function;
+        // optional parameters can be set before connect()
+        try {
+            AWSIotMessage message = new AWSIotMessage(topic, this.qos, payload);
+            this.client.publish(message);
+            MySimpleLogger.info(loggerId, "... PUBLISHED message " + payload + " to TOPIC: " + topic);
+        } catch (AWSIotException e) {
+            // TODO Auto-generated catch block
+            MySimpleLogger.error(loggerId, "... PUBLISHED message " + payload + " to TOPIC: " + topic);
+            e.printStackTrace();
+        }        
+            
+        
+        
+    }
     protected static void processInputParameters(String[] args) {
         
         if ( args.length > 0 ) {

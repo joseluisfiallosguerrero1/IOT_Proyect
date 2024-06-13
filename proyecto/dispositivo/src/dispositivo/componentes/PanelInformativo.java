@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import dispositivo.awsiotthing.AWSIoTThingStarterI;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
-import dispositivo.utils.MySimpleLogger;
 
 public class PanelInformativo implements IDispositivo {
     protected String deviceId = null;
@@ -57,20 +56,32 @@ public class PanelInformativo implements IDispositivo {
             this.awsIot.publish("f1", message.toString());
         } else if (status.equals("Limited_Manouvers")) {
             this.getFuncion("f1").parpadear();
+            JSONObject message = new JSONObject();
+            message.put("type", "parpadear");
+            this.awsIot.publish("f1", message.toString());
         } else if (status.equals("No_Manouvers") || status.equals("Collapsed")) {
             this.getFuncion("f1").encender();
+            JSONObject message = new JSONObject();
+            message.put("type", "encender");
+            this.awsIot.publish("f1", message.toString());
         }
         
     }
-	public void accidenteCarretera(String status) {
+	public void accidenteCarretera(String status) throws JSONException {
         if (!status.equals("Active")) {
             this.getFuncion("f2").apagar();
+            JSONObject message = new JSONObject();
+            message.put("type", "apagar");
+            this.awsIot.publish("f2", message.toString());
         } else  {
+            JSONObject message = new JSONObject();
+            message.put("type", "parpadear");
+            this.awsIot.publish("f2", message.toString());
 			this.getFuncion("f2").parpadear();
         }
     }
 
-    public void vehiculoEspecial(String tipo, int posVehiculoEspecial, String roadSegment) {
+    public void vehiculoEspecial(String tipo, int posVehiculoEspecial, String roadSegment) throws JSONException {
         int posSmartCar = this.roadPlace.getKm();
         String panelRoadSegment = this.roadPlace.getSegment();
         if(!roadSegment.equals(panelRoadSegment)){
@@ -83,10 +94,19 @@ public class PanelInformativo implements IDispositivo {
         if (tipo.equals("Ambulance") || tipo.equals("Police")) {
             if (distancia < 0) { //ya pasamos el vehiculo smartcar
                 this.getFuncion("f3").apagar();
+                JSONObject message = new JSONObject();
+                message.put("type", "apagar");
+                this.awsIot.publish("f3", message.toString());
             } else if ((distancia) > 0 && (distancia) < 200  ) { // estamos a menos de 200 metros del vehiculo smartcar
                 this.getFuncion("f3").parpadear();
+                JSONObject message = new JSONObject();
+                message.put("type", "parpadear");
+                this.awsIot.publish("f3", message.toString());
             } else { // estamos a más de 200 metros del vehiculo smartcar
                 this.getFuncion("f3").encender();
+                JSONObject message = new JSONObject();
+                message.put("type", "enceder");
+                this.awsIot.publish("f3", message.toString());
             }
         } 
         

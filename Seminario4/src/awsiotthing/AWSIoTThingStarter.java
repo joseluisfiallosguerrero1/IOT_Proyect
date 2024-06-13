@@ -43,8 +43,9 @@ public class AWSIoTThingStarter {
 	protected static String clientEndpoint = "a3kqs7rhgdczgv-ats.iot.us-east-1.amazonaws.com";       // replace <prefix> and <region> with your own. Se obtiene de AWS
 	protected static String clientId = "iot-object-" + UUID.randomUUID().toString();                  // replace with your own client ID. USE UNIQUE client IDs for concurrent connections.
 	protected static String certsDir = "certs/";								//Carpeta que aloja el certificado
-	protected static String certificateFile = certsDir + "f7d004799d9b5a11ad6850b39aba2531c0bf42d9ffe84199f7bebffe94fef9ae-certificate.pem.crt";               // X.509 based certificate file
-	protected static String privateKeyFile = certsDir + "f7d004799d9b5a11ad6850b39aba2531c0bf42d9ffe84199f7bebffe94fef9ae-private.pem.key";                    // PKCS#1 or PKCS#8 PEM encoded private key file
+	protected static String certificateFile = certsDir + "8ab048974966b0f77a64f8c96f7bc8f1c6db454170d8a03a5493708d10709217-certificate.pem.crt";               // X.509 based certificate file
+	protected static String privateKeyFile = certsDir + "8ab048974966b0f77a64f8c96f7bc8f1c6db454170d8a03a5493708d10709217-private.pem.key";    
+	                // PKCS#1 or PKCS#8 PEM encoded private key file
 	
 	protected static boolean publisher = false;
 	protected static boolean subscriber = false;

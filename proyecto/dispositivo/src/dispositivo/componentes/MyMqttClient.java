@@ -18,6 +18,7 @@ public abstract class MyMqttClient implements MqttCallback {
 	protected String brokerURL = null;
 	protected PanelInformativo panelInformativo;
 	protected String baseTopic = "es/upv/pros/tatami/smartcities/traffic/PTPaterna";
+	//protected String baseTopic = "es/upv";
 	
 	public MyMqttClient(String clientId, PanelInformativo panelInformativo, String MQTTBrokerURL) {
 		this.clientId = clientId + UUID.randomUUID().toString();

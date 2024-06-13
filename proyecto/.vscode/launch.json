@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AWSIoTThingStarter",
+            "request": "launch",
+            "mainClass": "dispositivo.awsiotthing.AWSIoTThingStarter",
+            "projectName": "proyecto_20c21e4e"
+        },
+        {
+            "type": "java",
+            "name": "AWSIoTThingStarterI",
+            "request": "launch",
+            "mainClass": "dispositivo.awsiotthing.AWSIoTThingStarterI",
+            "projectName": "proyecto_20c21e4e"
+        },
+        {
+            "type": "java",
             "name": "Dispositivo",
             "request": "launch",
             "mainClass": "dispositivo.iniciador.DispositivoIniciador",
@@ -13,7 +27,7 @@
                 "ttmi060",
                 "ttmi060.iot.upv.es",
                 8182,
-                "tcp://tambori.dsic.upv.es:1883",
+                "tcp://broker.hivemq.com:1883",
                 "R1s1"
             ]
         },

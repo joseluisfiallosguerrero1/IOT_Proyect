@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import dispositivo.awsiotthing.AWSIoTThingStarterI;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 import dispositivo.utils.MySimpleLogger;
@@ -14,12 +18,15 @@ public class PanelInformativo implements IDispositivo {
     protected RoadInfoSubscriber roadSubscriber = null;
     protected TrafficInfoSubscriber trafficSubscriber = null;
     protected RoadPlace roadPlace = null;
+    protected AWSIoTThingStarterI awsIot = null;
 
     public PanelInformativo(String deviceId, String deviceIP, String roadSegment, String mqttBroker) {
         this.deviceId = deviceId;
         String roadName = roadSegment.split("s")[0];
         this.roadPlace = new RoadPlace(roadName, roadSegment, 0);
         this.roadSubscriber = new RoadInfoSubscriber(deviceIP, this, mqttBroker);
+        this.awsIot = new AWSIoTThingStarterI();
+
         this.roadSubscriber.connect();
         this.trafficSubscriber = new TrafficInfoSubscriber("deviceIP", this, mqttBroker);
         this.trafficSubscriber.connect();
@@ -41,9 +48,13 @@ public class PanelInformativo implements IDispositivo {
         return this.roadPlace;
     }
 
-    public void congestionCarretera(String status) {
+    public void congestionCarretera(String status) throws JSONException {
+        System.out.println(status);
         if (status.equals("Free_Flow") || status.equals("Mostly_Free_Flow")) {
             this.getFuncion("f1").apagar();
+            JSONObject message = new JSONObject();
+            message.put("type", "apagado");
+            this.awsIot.publish("f1", message.toString());
         } else if (status.equals("Limited_Manouvers")) {
             this.getFuncion("f1").parpadear();
         } else if (status.equals("No_Manouvers") || status.equals("Collapsed")) {

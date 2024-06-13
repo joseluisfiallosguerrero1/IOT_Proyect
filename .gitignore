@@ -1,0 +1,6 @@
+proyecto/bin/
+proyecto/certs/8ab048974966b0f77a64f8c96f7bc8f1c6db454170d8a03a5493708d10709217-certificate.pem.crt
+proyecto/certs/8ab048974966b0f77a64f8c96f7bc8f1c6db454170d8a03a5493708d10709217-public.pem.key
+proyecto/certs/8ab048974966b0f77a64f8c96f7bc8f1c6db454170d8a03a5493708d10709217-private.pem.key
+proyecto/certs/AmazonRootCA1.pem
+proyecto/bin/.DS_Store

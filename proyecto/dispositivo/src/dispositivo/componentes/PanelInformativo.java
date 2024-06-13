@@ -6,6 +6,7 @@ import java.util.Map;
 
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
+import dispositivo.utils.MySimpleLogger;
 
 public class PanelInformativo implements IDispositivo {
     protected String deviceId = null;
@@ -60,8 +61,9 @@ public class PanelInformativo implements IDispositivo {
 
     public void vehiculoEspecial(String tipo, int posVehiculoEspecial, String roadSegment) {
         int posSmartCar = this.roadPlace.getKm();
-
-        if( roadSegment != "R1s1"){
+        String panelRoadSegment = this.roadPlace.getSegment();
+        if(!roadSegment.equals(panelRoadSegment)){
+            System.out.println("El vehiculo especial no está en el mismo segmento de carretera que el panel informativo");
             return;
         }
 

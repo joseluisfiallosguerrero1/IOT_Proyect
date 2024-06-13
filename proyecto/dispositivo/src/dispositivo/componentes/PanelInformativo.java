@@ -59,6 +59,27 @@ public class PanelInformativo implements IDispositivo {
         }
     }
 
+    public void vehiculoEspecial(String tipo, int posVehiculoEspecial, String roadSegment) {
+        int posSmartCar = this.roadPlace.getKm();
+
+        if( roadSegment != "R1s1"){
+            return;
+        }
+
+        int distancia = posSmartCar - posVehiculoEspecial;
+
+        if (tipo.equals("Ambulance") || tipo.equals("Police")) {
+            if (distancia < 0) { //ya pasamos el vehiculo smartcar
+                this.getFuncion("f3").apagar();
+            } else if ((distancia) > 0 && (distancia) < 200  ) { // estamos a menos de 200 metros del vehiculo smartcar
+                this.getFuncion("f3").parpadear();
+            } else { // estamos a más de 200 metros del vehiculo smartcar
+                this.getFuncion("f3").encender();
+            }
+        } 
+        
+    }
+    
 	@Override
 	public String getId() {
 		return this.deviceId;

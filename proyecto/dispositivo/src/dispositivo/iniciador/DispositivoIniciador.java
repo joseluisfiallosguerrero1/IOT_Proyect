@@ -24,6 +24,7 @@ public class DispositivoIniciador {
 		String roadSegment = args[4];
 
 		PanelInformativo panelInformativo = new PanelInformativo(deviceId, deviceIP, roadSegment, mqttBroker);
+		panelInformativo.getRoadPlace().setKm(230);
 
 		// Añadimos funciones al dispositivo
 		IFuncion f1 = Funcion.build("f1", FuncionStatus.OFF);

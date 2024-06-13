@@ -10,11 +10,13 @@ import org.json.JSONObject;
 import dispositivo.awsiotthing.AWSIoTThingStarterI;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
+import dispositivo.utils.MySimpleLogger;
 
 public class PanelInformativo implements IDispositivo {
     protected String deviceId = null;
     protected Map<String, IFuncion> functions = null;
     protected RoadInfoSubscriber roadSubscriber = null;
+    protected TrafficInfoSubscriber trafficSubscriber = null;
     protected RoadPlace roadPlace = null;
     protected AWSIoTThingStarterI awsIot = null;
 
@@ -26,6 +28,8 @@ public class PanelInformativo implements IDispositivo {
         this.awsIot = new AWSIoTThingStarterI();
 
         this.roadSubscriber.connect();
+        this.trafficSubscriber = new TrafficInfoSubscriber("deviceIP", this, mqttBroker);
+        this.trafficSubscriber.connect();
     }
 
     protected Map<String, IFuncion> getFunctions() {
@@ -59,7 +63,7 @@ public class PanelInformativo implements IDispositivo {
         
     }
 	public void accidenteCarretera(String status) {
-        if (status.equals("Active")) {
+        if (!status.equals("Active")) {
             this.getFuncion("f2").apagar();
         } else  {
 			this.getFuncion("f2").parpadear();
@@ -68,8 +72,9 @@ public class PanelInformativo implements IDispositivo {
 
     public void vehiculoEspecial(String tipo, int posVehiculoEspecial, String roadSegment) {
         int posSmartCar = this.roadPlace.getKm();
-
-        if( roadSegment != "R1s1"){
+        String panelRoadSegment = this.roadPlace.getSegment();
+        if(!roadSegment.equals(panelRoadSegment)){
+            System.out.println("El vehiculo especial no está en el mismo segmento de carretera que el panel informativo");
             return;
         }
 

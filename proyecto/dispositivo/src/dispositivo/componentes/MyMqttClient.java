@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 import dispositivo.utils.MySimpleLogger;
+import java.util.UUID;
 
 public abstract class MyMqttClient implements MqttCallback {
 
@@ -19,7 +20,7 @@ public abstract class MyMqttClient implements MqttCallback {
 	protected String baseTopic = "es/upv/pros/tatami/smartcities/traffic/PTPaterna";
 	
 	public MyMqttClient(String clientId, PanelInformativo panelInformativo, String MQTTBrokerURL) {
-		this.clientId = clientId;
+		this.clientId = clientId + UUID.randomUUID().toString();
 		this.brokerURL = MQTTBrokerURL;
 	}
 

@@ -27,7 +27,7 @@ public class AWSIoT_TopicHandler extends AWSIotTopic {
 			JSONObject jsonPayload;
 			try {
 				jsonPayload = new JSONObject(payloadString);
-				String roadSituationType = jsonPayload.getString("accion");
+				String roadSituationType = jsonPayload.getString("type");
 				if (roadSituationType.equals("ROAD_INCIDENT")) {
 					String text = message.getStringPayload();
 					MySimpleLogger.info(AWSIoTThingStarter.loggerId + "-topicHandler", "RECEIVED: " + text);

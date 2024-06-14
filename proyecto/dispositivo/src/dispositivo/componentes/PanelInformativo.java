@@ -105,7 +105,7 @@ public class PanelInformativo implements IDispositivo {
             } else { // estamos a más de 200 metros del vehiculo smartcar
                 this.getFuncion("f3").encender();
                 JSONObject message = new JSONObject();
-                message.put("type", "enceder");
+                message.put("type", "encender");
                 this.awsIot.publish("f3", message.toString());
             }
         } 

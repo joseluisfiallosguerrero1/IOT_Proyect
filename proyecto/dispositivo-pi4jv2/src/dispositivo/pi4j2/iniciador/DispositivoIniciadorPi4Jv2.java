@@ -29,6 +29,7 @@ public class DispositivoIniciadorPi4Jv2 {
 
 		
 		PanelInformativo panelInformativo = new PanelInformativo(deviceId, deviceIP, roadSegment, mqttBroker);
+		panelInformativo.getRoadPlace().setKm(230);
 
 		// Añadimos funciones al dispositivo
 		// f1 - GPIO_17
